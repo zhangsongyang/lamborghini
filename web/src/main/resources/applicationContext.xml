@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:component-scan base-package="cn.xsh">
+       
+    </context:component-scan> 
+    
+   <!--  
+   <bean id="baseRepository"
+		class="com.kuwo.repository.impl.BaseRepositoryImpl"/>
+		
+    
+    <bean id="baseService"
+		class="com.kuwo.service.impl.BaseServiceImpl">
+		 <property name="baseRepository" ref="baseRepository"/>
+	</bean> 
+	-->
+	
+	 <!--  <bean id="person" 
+		class="com.kuwo.ecombigdata.entity.Person">
+		<property name="username" value="spring"></property>	
+	</bean> --> 
+	<!-- <bean id="SpringApplicationContext" class="com.kuwo.utils.ApplicationContextHelper"></bean>   -->
+	
+	<import resource="datasorce-bean.xml"/>
+	 <util:map id="courses">
+        <entry key="english" value="100"/>
+        <entry key="computer" value="99"/>
+        <entry key="science" value="100"/>
+    </util:map>
+ 
+</beans>

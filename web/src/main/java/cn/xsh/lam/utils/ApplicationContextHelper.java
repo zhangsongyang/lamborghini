@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
  * Spring工具类
  * 
  */
-@Component
+//@Component
 public class ApplicationContextHelper implements ApplicationContextAware {
-	private static ApplicationContext appCtx;
+	private  ApplicationContext appCtx;
 
 	/**
 	 * 此方法可以把ApplicationContext对象inject到当前类中作为一个静态成员变量
@@ -29,8 +29,8 @@ public class ApplicationContextHelper implements ApplicationContextAware {
 	 * 
 	 * @return
 	 */
-	public static ApplicationContext getApplicationContext() {
-		return appCtx;
+	public  ApplicationContext getApplicationContext() {
+		return this.appCtx;
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class ApplicationContextHelper implements ApplicationContextAware {
 	 *            bean的名字
 	 * @return 返回一个bean对象
 	 */
-	public static Object getBean(String beanName) {
+	public  Object getBean(String beanName) {
 		return appCtx.getBean(beanName);
 	}
 }

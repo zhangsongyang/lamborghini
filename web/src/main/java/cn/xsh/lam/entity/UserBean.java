@@ -1,5 +1,6 @@
 package cn.xsh.lam.entity;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -7,24 +8,15 @@ public class UserBean {
 
     private String name;
 
-    private String sex;
+    private boolean sex;
 
-    private String school;
+    private String work;
 
-    private String old;
+    private int old;
 
-    private Map<String, String> course;
+    private Map<String, String> tech;
 
-
-    public UserBean() {
-    }
-
-    public UserBean(String name, String sex, String school, String old) {
-        this.name = name;
-        this.sex = sex;
-        this.school = school;
-        this.old = old;
-    }
+    private List<String> books;
 
     public String getName() {
         return name;
@@ -34,46 +26,69 @@ public class UserBean {
         this.name = name;
     }
 
-    public String getSex() {
+    public boolean isSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(boolean sex) {
         this.sex = sex;
     }
 
-    public String getSchool() {
-        return school;
+    public String getWork() {
+        return work;
     }
 
-    public void setSchool(String school) {
-        this.school = school;
+    public void setWork(String work) {
+        this.work = work;
     }
 
-    public String getOld() {
+    public int getOld() {
         return old;
     }
 
-    public void setOld(String old) {
+    public void setOld(int old) {
         this.old = old;
     }
 
-    public Map<String, String> getCourse() {
-        return course;
+    public Map<String, String> getTech() {
+        return tech;
     }
 
-    public void setCourse(Map<String, String> course) {
-        this.course = course;
+    public void setTech(Map<String, String> tech) {
+        System.out.println("set UserBean......");
+        this.tech = tech;
+    }
+
+    public List<String> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<String> books) {
+        this.books = books;
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserBean{" +
                 "name='" + name + '\'' +
-                ", sex='" + sex + '\'' +
-                ", school='" + school + '\'' +
-                ", old='" + old + '\'' +
-                ", course=" + course +
+                ", sex=" + sex +
+                ", work='" + work + '\'' +
+                ", old=" + old +
+                ", tech=" + tech +
+                ", books=" + books +
                 '}';
     }
+
+    public UserBean() {
+        System.out.println("UserBean constructor................");
+    }
+
+    public void init() {
+        System.out.println("init.....................");
+    }
+
+    public void destroy() {
+        System.out.println("destroy....................");
+    }
+
 }

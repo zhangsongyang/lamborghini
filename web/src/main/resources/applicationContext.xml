@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -10,32 +11,136 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd">
 
+    <!-- spring工具类 方便在非spring管理环境中获取bean -->
+    <bean id="springUtils" class="cn.xsh.lam.utils.SpringUtils"/>
+
     <context:component-scan base-package="cn.xsh">
-       
-    </context:component-scan> 
-    
-   <!--  
-   <bean id="baseRepository"
-		class="com.kuwo.repository.impl.BaseRepositoryImpl"/>
-		
-    
-    <bean id="baseService"
-		class="com.kuwo.service.impl.BaseServiceImpl">
-		 <property name="baseRepository" ref="baseRepository"/>
-	</bean> 
-	-->
-	
-	 <!--  <bean id="person" 
-		class="com.kuwo.ecombigdata.entity.Person">
-		<property name="username" value="spring"></property>	
-	</bean> --> 
-	<!-- <bean id="SpringApplicationContext" class="com.kuwo.utils.ApplicationContextHelper"></bean>   -->
-	
-	<import resource="datasorce-bean.xml"/>
-	 <util:map id="courses">
-        <entry key="english" value="100"/>
-        <entry key="computer" value="99"/>
-        <entry key="science" value="100"/>
-    </util:map>
- 
+
+    </context:component-scan>
+
+    <import resource="datasorce-bean.xml"/>
+
+    <util:list id="booksList">
+        <value>maven</value>
+        <value>java</value>
+        <value>linux</value>
+    </util:list>
+
+    <bean id="userBean" class="cn.xsh.lam.entity.UserBean">
+        <property name="name" value="zhangsongyang"/>
+        <property name="old" value="27"/>
+        <property name="work" value="beijing"/>
+        <property name="sex" value="true"/>
+        <property name="books" ref="booksList"/>
+        <property name="tech">
+            <map>
+                <entry key="top1" value="java"/>
+                <entry key="top2" value="mysql"/>
+                <entry key="top3" value="linux"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="car" class="cn.xsh.lam.entity.Car">
+        <constructor-arg index="0" value="BMW"/>
+        <constructor-arg index="1" value="00000000"/>
+    </bean>
+
+    <bean id="car1" class="cn.xsh.lam.entity.Car" p:number="auto" p:colour="111111"/>
+
+    <bean id="person" class="cn.xsh.lam.entity.Person">
+        <property name="username" value="zhangsongyang"/>
+        <property name="address" value="beijing"/>
+        <property name="car" ref="car1"/>
+    </bean>
+
+    <!-- 自动装配 autowire = byName （依据实体类中名字注入）-->
+    <bean id="person1" class="cn.xsh.lam.entity.Person" p:username="naruto" p:address="xian" autowire="byName"/>
+
+    <!-- 自动装配 autowire = byType （依据类型注入）-->
+    <!--<bean id="person2" class="cn.xsh.lam.entity.Person" p:username="naruto" p:address="xian" autowire="byType"/>-->
+
+    <!-- 抽象bean：bean的abstract属性为true的bean，不能被ioc容器实例化，只能用来继承 -->
+    <bean id="personAbstract" class="cn.xsh.lam.entity.Person" abstract="true">
+        <property name="username" value="zhangsongyang"/>
+        <property name="address" value="beijing"/>
+        <property name="car" ref="car1"/>
+    </bean>
+
+    <!-- bean配置的继承：使用parent属性指定继承哪个bean的配置 -->
+    <bean id="person3" p:username="xsh" p:address="shanghai" parent="personAbstract"/>
+
+    <!-- bean的依赖 depends-on 指定bean的前置依赖的bean -->
+    <bean id="person4" class="cn.xsh.lam.entity.Person" p:username="xiaoxue" p:address="nanjing" depends-on="car"/>
+
+    <!--
+        使用bean的scope指定bean的作用域
+        singleton: 默认值，容器初始时创建bean实例，在整个容器的生命周期中只创建这一个bean，单例的
+        prototype: 原型的，容器初始化时不创建bean的实例，而在每次请求时都创建一个新的bean实例，并返回
+    -->
+    <bean id="car2" class="cn.xsh.lam.entity.Car" scope="prototype">
+        <property name="number" value="777777"/>
+        <property name="colour" value="yyyyyy"/>
+    </bean>
+
+    <!-- spring spel表达式应用 -->
+    <bean id="person5" class="cn.xsh.lam.entity.Person">
+        <property name="address" value="#{'weinan'}"/>
+        <property name="username" value="#{'zsy'}"/>
+        <property name="car" value="#{car}"/>
+    </bean>
+
+    <bean id="userBean1" class="cn.xsh.lam.entity.UserBean" init-method="init" destroy-method="destroy">
+        <property name="name" value="zhangsongyang"/>
+        <property name="old" value="27"/>
+        <property name="work" value="beijing"/>
+        <property name="sex" value="true"/>
+        <property name="books" ref="booksList"/>
+        <property name="tech">
+            <map>
+                <entry key="top1" value="java"/>
+                <entry key="top2" value="mysql"/>
+                <entry key="top3" value="linux"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- 配置bean的后置处理器-->
+    <bean class="cn.xsh.lam.processor.MyBeanPostProcessor"/>
+
+    <!--
+         静态工厂方法，
+         class属性：指向静态工厂方法的全类名
+         factory-method：指向静态工厂方法的名字
+         constructor-arg：如果工厂方法有参数，使用constructor-arg来配置参数
+     -->
+    <bean id="car4" class="cn.xsh.lam.operate.HelloApiStaticFactory" factory-method="newInstance">
+        <constructor-arg index="0" value="555555"/>
+        <constructor-arg index="1" value="red"/>
+    </bean>
+
+    <!-- 1、定义实例工厂Bean -->
+    <bean id="beanInstanceFactory" class="cn.xsh.lam.operate.HelloApiInstanceFactory"/>
+
+    <!--
+         2、使用实例工厂Bean创建Bean
+          factory-bean: 指向实例工厂方法的bean
+          factory-method: 指向实例工厂方法的bean的实例方法
+          constructor-arg: 如果工厂方法有参数，使用constructor-arg来配置参数
+    -->
+    <bean id="car5" factory-bean="beanInstanceFactory" factory-method="newInstance">
+        <constructor-arg index="0" value="66666666"/>
+        <constructor-arg index="1" value="blue"/>
+    </bean>
+
+    <!--
+        通过FactoryBean来配置Bean的实例
+         class：指向FactoryBean的全类名
+         property：配置FactoryBean的属性
+         实际返回的是FactoryBean中getObject（）方法返回的实例
+    -->
+    <bean id="car6" class="cn.xsh.lam.operate.CarFactoryBean" >
+        <property name="num" value="999999"/>
+    </bean>
+
 </beans>

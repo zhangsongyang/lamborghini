@@ -24,7 +24,7 @@ public class HelloServletTwo extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Get@@@");
+        System.out.println("Get@@@ AOP。。。。。。");
         baseService.saveService();
     }
 
